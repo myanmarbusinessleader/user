@@ -7,5 +7,6 @@ const categories = "categories";
 const items = "items";
 const stateCollection = "state";
 const businesses = "businesses";
+const categoryCollection = "categories";
 
 

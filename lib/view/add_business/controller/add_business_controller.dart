@@ -5,19 +5,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmbl/constant/constant.dart';
+import 'package:mmbl/controller/filter_form_controller.dart';
 import 'package:mmbl/model/business_listing.dart';
 import 'package:mmbl/model/form_object.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mmbl/view/widgets/show_location_picker.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../constant/state.dart';
+import '../../../constant/township.dart';
 import '../../../service/database.dart';
 
 class AddBusinessController extends GetxController {
   final _database = Database();
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   RxMap<String,Rxn<FormObject>> inputMap = <String,Rxn<FormObject>>{}.obs;
+  final FilterFormController _controller = Get.find();
   var isFirstTimePress = false.obs;
   var state = allStates.obs;
   var township = allTownship.obs;
@@ -126,13 +128,13 @@ class AddBusinessController extends GetxController {
                           inputMap[key]!.value!.error.isNotEmpty && isFirstTimePress.value;
   }
 
-  Query<Map<String, dynamic>> searchTownship(String? value) {
+  Future<List<Map<String, dynamic>>> searchTownship(String? value) async{
+    var mock = townshipMap[state.value];
+    mock!.sort((a,b) => a["name"]!.compareTo(b["name"]!));
     if(value == null || value.isEmpty){
-    return FirebaseFirestore.instance.collection( mockState[state.value]!) .orderBy("name");
+    return mock;
     }else{
-      return FirebaseFirestore.instance.collection(mockState[state.value]!,)
-            .where("searchList", arrayContainsAny: [value])
-            .orderBy("name");
+      return mock.where((element) => element["name"]!.startsWith(value)).toList();
     }
   }
 

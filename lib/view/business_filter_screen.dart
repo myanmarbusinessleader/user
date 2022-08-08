@@ -12,7 +12,7 @@ class BusinessFilterScreen extends StatefulWidget {
   final String appBarTitle;
   final String hintText;
   final void Function(BusinessListing) onSelected;
-  final Query<Map<String, dynamic>> Function(String?) search;
+  final Future<List<Map<String, dynamic>>> Function(String?) search;
   const BusinessFilterScreen({Key? key,required this.appBarTitle,
   required this.hintText,
   required this.search,

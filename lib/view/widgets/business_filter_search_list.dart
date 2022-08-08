@@ -20,35 +20,30 @@ class BusinessFilterSearchList extends StatelessWidget {
 
   final String? searchValue;
   final void Function(BusinessListing value) onSelected; 
-  final Query<Map<String, dynamic>> Function(String? value) search;
+  final Future<List<Map<String, dynamic>>> Function(String? value) search;
 
   @override
   Widget build(BuildContext context) {
     final FilterFormController controller = Get.find();
     final size = MediaQuery.of(context).size;
     return Expanded(
-          child: FirestoreQueryBuilder<Map<String,dynamic>>(
-            query: search(searchValue), 
-            builder: (context,snapshot,__){
-              if(snapshot.isFetching){
-                return const Center(child: Text("Searching......"),);
-              }
+          child: FutureBuilder<List<Map<String,dynamic>>>(
+            future: search(searchValue), 
+            builder: (context,snapshot){
+              
               if(snapshot.hasError){
                 debugPrint("*******ERROR: ${snapshot.error}");
                 return const Center(child: Text("Something was wrong!.Try again"),);
               }
               if(snapshot.hasData){
-                final data = snapshot.docs;
-                if(data.isNotEmpty){
+                final dataList = snapshot.data;
+                if(!(dataList == null) && dataList.isNotEmpty){
                   var totalNotFound = 0;
                   return ListView.builder(
-                  itemCount: snapshot.docs.length,
+                  itemCount: dataList.length,
                   itemBuilder: (context,index){
 
-                    if(snapshot.hasMore && index + 1 == snapshot.docs.length){
-                      snapshot.fetchMore();
-                    }
-                    final data = BusinessListing.fromJson(snapshot.docs[index].data());
+                    final data = BusinessListing.fromJson(dataList[index]);
 
                     if(//Check Condition Because Firebase not support
                     //multiple where clause to Filter.
@@ -59,7 +54,7 @@ class BusinessFilterSearchList extends StatelessWidget {
                       (controller.category.value != allCategory) && (data.categoryID != controller.category.value)
                       ){
                         totalNotFound++;
-                      return totalNotFound == snapshot.docs.length ?
+                      return totalNotFound == dataList.length ?
                       SizedBox(
                         height: size.height*0.5,
                         child: const Center(
@@ -148,7 +143,8 @@ class BusinessFilterSearchList extends StatelessWidget {
                   );
                 }
               }
-              return const Center(child: Text("Let search"),);
+           return const Center(child: Text("Searching......"),);
+
             },
             ),
           );
