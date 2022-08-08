@@ -1,0 +1,157 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart' hide GeoPoint;
+import 'package:flutter/material.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:flutterfire_ui/firestore.dart';
+import 'package:get/get.dart';
+import 'package:mmbl/constant/constant.dart';
+import 'package:mmbl/controller/filter_form_controller.dart';
+import 'package:mmbl/model/business_listing.dart';
+import 'package:mmbl/view/widgets/show_map.dart';
+
+
+class BusinessFilterSearchList extends StatelessWidget {
+  const BusinessFilterSearchList({
+    Key? key,
+    required this.searchValue,
+    required this.search,
+    required this.onSelected,
+  }) : super(key: key);
+
+  final String? searchValue;
+  final void Function(BusinessListing value) onSelected; 
+  final Query<Map<String, dynamic>> Function(String? value) search;
+
+  @override
+  Widget build(BuildContext context) {
+    final FilterFormController controller = Get.find();
+    final size = MediaQuery.of(context).size;
+    return Expanded(
+          child: FirestoreQueryBuilder<Map<String,dynamic>>(
+            query: search(searchValue), 
+            builder: (context,snapshot,__){
+              if(snapshot.isFetching){
+                return const Center(child: Text("Searching......"),);
+              }
+              if(snapshot.hasError){
+                debugPrint("*******ERROR: ${snapshot.error}");
+                return const Center(child: Text("Something was wrong!.Try again"),);
+              }
+              if(snapshot.hasData){
+                final data = snapshot.docs;
+                if(data.isNotEmpty){
+                  var totalNotFound = 0;
+                  return ListView.builder(
+                  itemCount: snapshot.docs.length,
+                  itemBuilder: (context,index){
+
+                    if(snapshot.hasMore && index + 1 == snapshot.docs.length){
+                      snapshot.fetchMore();
+                    }
+                    final data = BusinessListing.fromJson(snapshot.docs[index].data());
+
+                    if(//Check Condition Because Firebase not support
+                    //multiple where clause to Filter.
+                      (controller.state.value != allStates) && (data.state != controller.state.value)
+                      ||
+                      (controller.township.value != allTownship) && (data.township != controller.township.value)
+                      ||
+                      (controller.category.value != allCategory) && (data.categoryID != controller.category.value)
+                      ){
+                        totalNotFound++;
+                      return totalNotFound == snapshot.docs.length ?
+                      SizedBox(
+                        height: size.height*0.5,
+                        child: const Center(
+                          child: Text(
+                              "No results found!",
+                          ),
+                        ),
+                      )
+                      : const SizedBox();
+                    }
+
+                    return InkWell(
+                      onTap: () => onSelected(data),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: 
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: size.width*0.5,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                           //Business Name 
+                                            Text(
+                                              data.name,
+                                              style: const TextStyle(color: Colors.black,),
+                                            ),
+                                              
+                                            //Category
+                                            Text(
+                                                  data.categoryID,
+                                                  style: const TextStyle(color: Colors.black,),
+                                                ),
+                                            //Address
+                                            Text(
+                                                  data.businessAddress,
+                                                  style: const TextStyle(color: Colors.black,),
+                                                ),
+                                            //Phone
+                                            Text(
+                                                  data.phoneNumber ?? "",
+                                                  style: const TextStyle(color: Colors.black,),
+                                                ),
+                                            //Condition Icon
+                                            IconButton(
+                                              onPressed: (){
+                                                //Show Google Map
+                                                showMap(
+                                                  context: context,
+                                                  initZoom: 10,
+                                                  initCurrentUserPosition: false,
+                                                  // ignore: prefer_const_constructors
+                                                  initPosition: GeoPoint(
+                                                    latitude: double.parse(data.geoPoint![0]),
+                                                    longitude: double.parse(data.geoPoint![1]),
+                                                    )
+                                                  );
+                                              }, 
+                                              icon: const Icon(Icons.map,color: Colors.black,)
+                                              )
+                                      ],
+                                    ),
+                                  ),
+                                  //Business Logo
+                                  Image.network(
+                                      data.businessLogo ?? "",
+                                      width: 150,
+                                      height: 150,
+                                      ),
+                                   
+                                ],
+                              )
+                        ),
+                      ),
+                    );
+                  },
+                  );
+                }else{
+                  return const Center(
+                    child: Text(
+                      "No results found!",
+                    ),
+                  );
+                }
+              }
+              return const Center(child: Text("Let search"),);
+            },
+            ),
+          );
+      
+  }
+}
