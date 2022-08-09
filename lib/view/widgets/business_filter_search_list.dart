@@ -9,6 +9,8 @@ import 'package:mmbl/controller/filter_form_controller.dart';
 import 'package:mmbl/model/business_listing.dart';
 import 'package:mmbl/view/widgets/show_map.dart';
 
+import '../../utils/router/router.dart';
+
 
 class BusinessFilterSearchList extends StatelessWidget {
   const BusinessFilterSearchList({
@@ -67,7 +69,10 @@ class BusinessFilterSearchList extends StatelessWidget {
                     }
 
                     return InkWell(
-                      onTap: () => onSelected(data),
+                      onTap: () {
+                        controller.setSelectedBL(data);
+                        Get.toNamed(businessDetailScreen);
+                      },
                       child: Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

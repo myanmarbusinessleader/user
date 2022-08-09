@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mmbl/constant/constant.dart';
 import 'package:mmbl/controller/filter_form_controller.dart';
 import 'package:mmbl/utils/widgets/search_widget.dart';
 
@@ -36,33 +37,39 @@ class _BusinessFilterScreenState extends State<BusinessFilterScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar:  AppBar(
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.white,size: 35,),
-          centerTitle: true,
-          title:  Text(_controller.category.value,
-          style: const TextStyle(color: Colors.white,)),
-        ),
-      body: Column(
-        children: [
-          SearchWidget(
-        size: size,
-        onChanged: (value){
-          setState(() {
-            searchValue = value;
-          });
-        }, 
-        debouncer: debouncer, 
-        hintText: widget.hintText,
-        ),
-        BusinessFilterSearchList(
-          searchValue: searchValue, 
-          search: widget.search, 
-          onSelected: widget.onSelected,
-          )
-        ],
-      )    
+    return WillPopScope(
+      onWillPop: () async{
+        _controller.changeCategory(allCategory);
+        return true;
+      },
+      child: Scaffold(
+        appBar:  AppBar(
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.white,size: 35,),
+            centerTitle: true,
+            title:  Text(_controller.category.value,
+            style: const TextStyle(color: Colors.white,)),
+          ),
+        body: Column(
+          children: [
+            SearchWidget(
+          size: size,
+          onChanged: (value){
+            setState(() {
+              searchValue = value;
+            });
+          }, 
+          debouncer: debouncer, 
+          hintText: widget.hintText,
+          ),
+          BusinessFilterSearchList(
+            searchValue: searchValue, 
+            search: widget.search, 
+            onSelected: widget.onSelected,
+            )
+          ],
+        )    
+      ),
     );
   }
 }

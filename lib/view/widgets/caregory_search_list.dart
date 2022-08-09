@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:get/get.dart';
 
+import '../../constant/constant.dart';
 import '../../controller/filter_form_controller.dart';
 import '../../model/category.dart';
+import '../business_filter_screen.dart';
 
 class CaregorySearchList extends StatelessWidget {
   const CaregorySearchList({
@@ -38,11 +40,26 @@ class CaregorySearchList extends StatelessWidget {
                    
                     final category = Category.fromJson(snapshot.data![index]);
 
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(category.name,style: const 
-                          TextStyle(color: Colors.black,)
+                    return InkWell(
+                      onTap: (){
+                         controller.changeState(allStates);
+                            controller.changeTownship(allTownship);
+                            controller.changeCategory(category.name);
+                            Get.to(() => BusinessFilterScreen(
+                            appBarTitle: category.name, 
+                            hintText: "လုပ်ငန်းအမည်", 
+                            search: controller.searchBusiness, 
+                            onSelected: (value){
+                              debugPrint("*********GO TO: ${value.name} page");
+                            },
+                            ));
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(category.name,style: const 
+                            TextStyle(color: Colors.black,)
+                          ),
                         ),
                       ),
                     );

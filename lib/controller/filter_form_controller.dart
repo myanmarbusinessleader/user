@@ -20,6 +20,7 @@ class FilterFormController extends GetxController {
   var state = allStates.obs;
   var township = allTownship.obs;
   var tabIndex = 0.obs;
+  BusinessListing? selectedBL;
 
   @override
   void onInit() {
@@ -54,6 +55,7 @@ class FilterFormController extends GetxController {
     categoryList.value = catList;
   }
   
+  void setSelectedBL(BusinessListing b) => selectedBL = b;
   void changeCategory(String value) => category.value = value;
   void changeState(String value) => state.value = value;
   void changeTownship(String value) => township.value = value;
