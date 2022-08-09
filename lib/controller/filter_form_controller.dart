@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:mmbl/constant/constant.dart';
 import 'package:mmbl/constant/state.dart';
 import 'package:mmbl/constant/township.dart';
+import 'package:mmbl/model/business_listing.dart';
+import 'package:mmbl/model/category.dart';
 import '../service/database.dart';
 
 
@@ -12,6 +14,7 @@ class FilterFormController extends GetxController {
   final TextEditingController ePController = TextEditingController();
   RxList<Map<String,dynamic>> categoryList = <Map<String,dynamic>>[].obs;
   RxList<Map<String,dynamic>> businessList = <Map<String,dynamic>>[].obs;
+  RxList<Category> gridList = <Category>[].obs;
   final _database = Database();
   var category = allCategory.obs;
   var state = allStates.obs;
@@ -20,9 +23,21 @@ class FilterFormController extends GetxController {
 
   @override
   void onInit() {
+    getGridList();
     getCategories();
     getBusinesses();
     super.onInit();
+  }
+
+  Future<void> getGridList() async{
+    final result = await FirebaseFirestore.instance
+    .collection(categoryCollection)
+    .where("isGrid", isEqualTo: true)
+    .orderBy("name")
+    .get();
+    gridList.value = result.docs.map((e) => Category.fromJson(
+      e.data()
+    )).toList();
   }
 
   Future<void> getBusinesses() async{
