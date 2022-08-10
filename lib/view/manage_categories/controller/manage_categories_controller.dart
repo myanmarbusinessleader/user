@@ -49,10 +49,10 @@ Future<void> saveCategory() async{
     ).doc(id)
     .set(
       category.toJson()
-    ).then((value){
-      _controller.categoryList.add(category.toJson());
-    });
+    );
+    isLoading.value = false;
   } catch (e) {
+    isLoading.value = false;
     debugPrint("Saving Error in $e");
   }
 }
@@ -71,14 +71,11 @@ Future<void> saveCategory() async{
  }
 
  Future<void> deleteCategory(String id) async{
-  final removeData = _controller.categoryList.where((p0) => p0["id"] == id).first;
   try {
-    _controller.categoryList.remove(removeData);
     FirebaseFirestore.instance.collection(categoryCollection)
     .doc(id)
     .delete();
   } catch (e) {
-    _controller.categoryList.add(removeData);
     debugPrint("Deleting Error $e");
   }
  }

@@ -33,9 +33,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
         appBar: AppBar(
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.white,size: 35,),
-          centerTitle: true,
-          title: const Text("မြန်မာပြည်စီးပွား‌ရေးလမ်းညွှန်",
-          style: TextStyle(color: Colors.white,)),
+          title: const Text("မြန်မာပြည် စီးပွား‌ရေးလမ်းညွှန်",
+          style: TextStyle(color: Colors.white,fontSize: 16,)),
           bottom:  TabBar(
             controller: tabController,
             indicatorColor: Colors.white,

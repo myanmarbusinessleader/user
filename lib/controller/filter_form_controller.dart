@@ -24,35 +24,45 @@ class FilterFormController extends GetxController {
 
   @override
   void onInit() {
-    getGridList();
-    getCategories();
-    getBusinesses();
+    listenGridList();
+    listenCategories();
+    listenBusinesses();
     super.onInit();
   }
 
-  Future<void> getGridList() async{
+  Future<void> listenGridList() async{
     final result = await FirebaseFirestore.instance
     .collection(categoryCollection)
     .where("isGrid", isEqualTo: true)
     .orderBy("name")
-    .get();
-    gridList.value = result.docs.map((e) => Category.fromJson(
+    .snapshots()
+    .listen((event) {
+      gridList.value = event.docs.map((e) => Category.fromJson(
       e.data()
     )).toList();
+    });
   }
 
-  Future<void> getBusinesses() async{
-    final result = await _database.getRequestCollection(collectionPath: businesses);
-    var busList = result.docs.map((e) => e.data()).toList();
+  void listenBusinesses() {
+    FirebaseFirestore.instance.collection(businesses)
+    .snapshots()
+    .listen((event) {
+      var busList = event.docs.map((e) => e.data()).toList();
     busList.sort((a,b) => a["name"].compareTo(b["name"]));
     businessList.value = busList;
+    });
+    
   }
   
-  Future<void> getCategories() async{
-    final result = await _database.getRequestCollection(collectionPath: categoryCollection);
-    var catList = result.docs.map((e) => e.data()).toList();
-    catList.sort((a,b) => a["name"].compareTo(b["name"]));
-    categoryList.value = catList;
+  void listenCategories() {
+    FirebaseFirestore.instance.collection(categoryCollection)
+    .snapshots()
+    .listen((event) {
+      var catList = event.docs.map((e) => e.data()).toList();
+      catList.sort((a,b) => a["name"].compareTo(b["name"]));
+      categoryList.value = catList;
+    });
+    
   }
   
   void setSelectedBL(BusinessListing b) => selectedBL = b;

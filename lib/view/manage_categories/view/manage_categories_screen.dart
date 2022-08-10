@@ -12,6 +12,7 @@ class ManageCategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ManageCategoriesController controller = Get.find();
     final FilterFormController fController = Get.find();
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -55,10 +56,24 @@ class ManageCategoriesScreen extends StatelessWidget {
                     ],
                   ),
                   //Save
-                  ElevatedButton(
-                    onPressed: () => controller.saveCategory(), 
-                    child: const Text("Save")
-                    ),
+                  Obx(
+                     () {
+                      return Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          width: size.width * 0.7,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () => controller.saveCategory(), 
+                            child: controller.isLoading.value ?
+                            const CircularProgressIndicator(
+                              color: Colors.white,
+                            ): const Text("Save")
+                            ),
+                        ),
+                      );
+                    }
+                  ),
                 ],
               ),
               ),

@@ -25,10 +25,12 @@ class BusinessLogo extends StatelessWidget {
          ),
          const SizedBox(height: 20),
          //Name
-         Text(bL.name,
-         style: const 
-         TextStyle(color: Colors.black,
-         fontSize: 20,fontWeight: FontWeight.bold,))
+         Expanded(
+           child: Text(bL.name,
+           style: const 
+           TextStyle(color: Colors.black,
+           fontSize: 20,fontWeight: FontWeight.bold,)),
+         )
        ],
           );
   }
