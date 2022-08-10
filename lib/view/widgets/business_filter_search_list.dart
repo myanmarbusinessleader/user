@@ -3,10 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart' hide GeoPoint;
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:flutterfire_ui/firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mmbl/constant/constant.dart';
 import 'package:mmbl/controller/filter_form_controller.dart';
 import 'package:mmbl/model/business_listing.dart';
+import 'package:mmbl/utils/other/intent_method.dart';
 import 'package:mmbl/view/widgets/show_map.dart';
 
 import '../../utils/router/router.dart';
@@ -106,7 +108,27 @@ class BusinessFilterSearchList extends StatelessWidget {
                                                   data.phoneNumber ?? "",
                                                   style: const TextStyle(color: Colors.black,),
                                                 ),
-                                            //Condition Icon
+                                            Row(
+                                              children: [
+                                                //Condition Icon
+                                            Expanded(
+                                              child: IconButton(
+                                                //Phone Call
+                                                onPressed: () => makePhoneCall(data.contactPhoneNumer), 
+                                                icon: Row(
+                                                  children: const [
+                                                     Expanded(
+                                                       child: Icon(
+                                                              FontAwesomeIcons.phoneVolume,
+                                                              color: Colors.blue,
+                                                              size: 30,
+                                                            ),
+                                                     ),
+                                                Expanded(child: Text("Call Now",style: TextStyle(color: Colors.blue,)))
+                                                  ],
+                                                )
+                                                ),
+                                            ),
                                             IconButton(
                                               onPressed: (){
                                                 //Show Google Map
@@ -121,8 +143,19 @@ class BusinessFilterSearchList extends StatelessWidget {
                                                     )
                                                   );
                                               }, 
-                                              icon: const Icon(Icons.map,color: Colors.black,)
-                                              )
+                                              icon: const Icon(Icons.map,color: Colors.blue,size: 30,)
+                                              ),
+                                              //Email If not null
+                                            !(data.email == null) && data.email!.isNotEmpty ? 
+                                              IconButton(
+                                                onPressed: () => sendEmail(data.email ?? ""), 
+                                                icon: const Icon(
+                                                  FontAwesomeIcons.envelope,
+                                                  color: Colors.blue,
+                                                size: 30,),
+                                                ) : const SizedBox(), 
+                                              ],
+                                            )
                                       ],
                                     ),
                                   ),

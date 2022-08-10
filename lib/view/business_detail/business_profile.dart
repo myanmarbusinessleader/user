@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../model/business_listing.dart';
-import 'business_detail_screen.dart';
 import 'business_logo.dart';
 
 
@@ -32,7 +31,7 @@ class BusinessProfile extends StatelessWidget {
           //Phone
           Row(
             children: [
-              Icon(Icons.phone,color: Colors.grey,size: 35),
+              const Icon(FontAwesomeIcons.mobile,color: Colors.grey,size: 35),
               //Name
               Text(bL.contactPhoneNumer,
               style: Theme.of(context).textTheme.titleMedium,)

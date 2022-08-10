@@ -55,6 +55,7 @@ class ManageCategoriesScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 5,),
                   //Save
                   Obx(
                      () {

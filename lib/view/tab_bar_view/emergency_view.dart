@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mmbl/constant/emergency.dart';
 
+import '../../utils/other/intent_method.dart';
+
 class EmergencyView extends StatelessWidget {
   const EmergencyView({Key? key}) : super(key: key);
 
@@ -35,9 +37,7 @@ class EmergencyView extends StatelessWidget {
                   ],
                 ),
                 IconButton(
-                  onPressed: (){
-
-                  }, 
+                  onPressed: () => makePhoneCall("099898"), 
                   icon: const Icon(Icons.phone,color: Colors.white,size: 35),
                 ),
               ],
