@@ -4,18 +4,68 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmbl/constant/constant.dart';
 import 'package:mmbl/constant/state.dart';
+import 'package:mmbl/constant/township.dart';
+import 'package:mmbl/model/business_listing.dart';
+import 'package:mmbl/model/category.dart';
 import '../service/database.dart';
 
 
 class FilterFormController extends GetxController {
   final TextEditingController ePController = TextEditingController();
+  RxList<Map<String,dynamic>> categoryList = <Map<String,dynamic>>[].obs;
+  RxList<Map<String,dynamic>> businessList = <Map<String,dynamic>>[].obs;
+  RxList<Category> gridList = <Category>[].obs;
   final _database = Database();
   var category = allCategory.obs;
   var state = allStates.obs;
   var township = allTownship.obs;
   var tabIndex = 0.obs;
+  BusinessListing? selectedBL;
+
+  @override
+  void onInit() {
+    listenGridList();
+    listenCategories();
+    listenBusinesses();
+    super.onInit();
+  }
+
+  Future<void> listenGridList() async{
+    final result = await FirebaseFirestore.instance
+    .collection(categoryCollection)
+    .where("isGrid", isEqualTo: true)
+    .orderBy("name")
+    .snapshots()
+    .listen((event) {
+      gridList.value = event.docs.map((e) => Category.fromJson(
+      e.data()
+    )).toList();
+    });
+  }
+
+  void listenBusinesses() {
+    FirebaseFirestore.instance.collection(businesses)
+    .snapshots()
+    .listen((event) {
+      var busList = event.docs.map((e) => e.data()).toList();
+    busList.sort((a,b) => a["name"].compareTo(b["name"]));
+    businessList.value = busList;
+    });
+    
+  }
   
+  void listenCategories() {
+    FirebaseFirestore.instance.collection(categoryCollection)
+    .snapshots()
+    .listen((event) {
+      var catList = event.docs.map((e) => e.data()).toList();
+      catList.sort((a,b) => a["name"].compareTo(b["name"]));
+      categoryList.value = catList;
+    });
+    
+  }
   
+  void setSelectedBL(BusinessListing b) => selectedBL = b;
   void changeCategory(String value) => category.value = value;
   void changeState(String value) => state.value = value;
   void changeTownship(String value) => township.value = value;
@@ -28,99 +78,50 @@ class FilterFormController extends GetxController {
     }
   }
 
-  /* writeStates() async{
-    for (var element in mockState) {
-      final tempList = getCategoryNameList(element["name_mm"] as String);
-      await _database.write(
-        collectionPath: stateCollection, 
-        data: {
-          "name": element["name_mm"] as String,
-          "searchList": tempList,
-        },
-        );
-    }
-  }
-
-  writeTownship() async{
-    for (var i = 0; i < mockTownship.length; i++) {
-      final eachTownList = mockTownship[i];
-      final eachState = mockState[i];
-      //Looping for townList
-      for (var element in eachTownList) {
-        final tempList = getCategoryNameList(element["name_mm"] as String);
-        await FirebaseFirestore.instance
-        .collection("township")
-        .doc(eachState["name_en"] as String)
-        .collection(eachState["name_en"] as String)
-        .doc()
-        .set({
-          "name": element["name_mm"] as String,
-          "searchList": tempList,
-        });
-        
-      }
-    }
-  } */
-
-  /* writeMockCategories() async{
-    for (var element in mockCategories) {
-      final uuid = Uuid().v1();
-      final tempList = getCategoryNameList(element);
-      await _database.write(
-        collectionPath: categories, 
-        documentPath: uuid, 
-        data: Category(
-          id: uuid, 
-          name: element,
-          searchList: tempList,
-          )
-        .toJson(),
-        );
-    }
-  } */
-
-  Query<Map<String, dynamic>> search(String? value) {
+  Future<List<Map<String, dynamic>>> search(String? value) async{
+    await Future.delayed(const Duration(milliseconds: 500));
     if(value == null || value.isEmpty){
-    return FirebaseFirestore.instance.collection(categories)
-            .orderBy("name");
+      return categoryList;
     }else{
-      return FirebaseFirestore.instance.collection(categories)
-            .where("searchList", arrayContainsAny: [value])
-            .orderBy("name");
+      final whereResult = categoryList.where((e) => e["name"].startsWith(value));
+      return whereResult.toList();
     }
   }
 
-  Query<Map<String, dynamic>> searchState(String? value) {
+  Future<List<Map<String, dynamic>>> searchState(String? value) async{
+    await Future.delayed(const Duration(milliseconds: 500));
+    var mock = stateMap;
+    mock.sort((a,b) => a["name"]!.compareTo(b["name"]!));
     if(value == null || value.isEmpty){
-    return FirebaseFirestore.instance.collection(stateCollection)
-            .orderBy("name");
+    
+    return mock;
     }else{
-      return FirebaseFirestore.instance.collection(stateCollection)
-            .where("searchList", arrayContainsAny: [value])
-            .orderBy("name");
+      return mock.where((element) => element["name"]!.startsWith(value)).toList();
     }
   }
 
-  Query<Map<String, dynamic>> searchTownship(String? value) {
+  Future<List<Map<String, dynamic>>> searchTownship(String? value) async{
+    await Future.delayed(const Duration(milliseconds: 500));
+    var mock = townshipMap[state.value];
+    mock!.sort((a,b) => a["name"]!.compareTo(b["name"]!));
     if(value == null || value.isEmpty){
-    return FirebaseFirestore.instance.collection( mockState[state.value]!) .orderBy("name");
+    return mock;
     }else{
-      return FirebaseFirestore.instance.collection(mockState[state.value]!,)
-            .where("searchList", arrayContainsAny: [value])
-            .orderBy("name");
+      return mock.where((element) => element["name"]!.startsWith(value)).toList();
     }
   }
 
-  Query<Map<String, dynamic>> searchBusiness(
+  Future<List<Map<String, dynamic>>> searchBusiness(
     String? value,
-    ) {
+    ) async{
+      await Future.delayed(const Duration(milliseconds: 500));
          if(value == null || value.isEmpty){
-    return FirebaseFirestore.instance.collection(businesses)
-            .orderBy("name");
+    return businessList;
     }else{
-      return FirebaseFirestore.instance.collection(businesses)
-            .where("searchList", arrayContainsAny: [value])
-            .orderBy("name");
+      return businessList.where((e){
+        final name = e["name"] as String;
+        return name.startsWith(value) || name.contains(value);
+      }).toList();
     }
       }
 

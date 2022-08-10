@@ -10,8 +10,13 @@ class Category{
   // ignore: deprecated_member_use
   @JsonKey(nullable: true,defaultValue: false)
   bool? isGrid;
-
-  Category({required this.id,required this.name,this.isGrid,required this.searchList});
+   // ignore: deprecated_member_use
+   @JsonKey(nullable: true)
+  final String? image;
+  Category({required this.id,required this.name,this.isGrid,
+  required this.searchList,
+  this.image,
+  });
 
   factory Category.fromJson(Map<String,dynamic> json) => _$CategoryFromJson(json);
 

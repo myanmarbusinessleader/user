@@ -26,7 +26,7 @@ class _CategoriesViewState extends State<CategoriesView> {
         //
         SearchWidget(
           size: size, 
-          hintText: "လုပ်ငန်းအမည်",
+          hintText: "လုပ်ငန်းအမျိုးအစားအမည်",
         debouncer: debouncer,
         onChanged: (value){
           setState(() {

@@ -1,7 +1,5 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/firestore.dart';
 
 
 class FilterSearchList extends StatelessWidget {
@@ -14,32 +12,26 @@ class FilterSearchList extends StatelessWidget {
 
   final String? searchValue;
   final void Function(String value) onSelected; 
-  final Query<Map<String, dynamic>> Function(String? value) search;
+  final Future<List<Map<String, dynamic>>> Function(String? value) search;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-          child: FirestoreQueryBuilder<Map<String,dynamic>>(
-            query: search(searchValue), 
-            builder: (context,snapshot,__){
-              if(snapshot.isFetching){
-                return const Center(child: Text("Searching......"),);
-              }
+          child: FutureBuilder<List<Map<String,dynamic>>>(
+            future: search(searchValue), 
+            builder: (context,snapshot){
+              
               if(snapshot.hasError){
                 debugPrint("*******ERROR: ${snapshot.error}");
                 return const Center(child: Text("Something was wrong!.Try again"),);
               }
               if(snapshot.hasData){
-                final data = snapshot.docs;
-                if(data.isNotEmpty){
+                final dataList = snapshot.data?.map((e) => e).toList();
+                if(!(dataList == null) && dataList.isNotEmpty){
                   return ListView.builder(
-                  itemCount: snapshot.docs.length,
+                  itemCount: dataList.length,
                   itemBuilder: (context,index){
-                    if(snapshot.hasMore && index + 1 <= snapshot.docs.length){
-                      snapshot.fetchMore();
-                    }
-                    final data = snapshot.docs[index].data();
-
+                    final data = dataList[index];
                     return InkWell(
                       onTap: () => onSelected(data["name"]),
                       child: Card(
@@ -61,7 +53,7 @@ class FilterSearchList extends StatelessWidget {
                   );
                 }
               }
-              return const Center(child: Text("Let search"),);
+              return  const Center(child: Text("Searching......"),);
             },
             ),
           );

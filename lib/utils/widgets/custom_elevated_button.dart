@@ -6,6 +6,7 @@ class CustomElevatedButton extends StatelessWidget {
     Key? key,
     required this.text,
     this.width,
+    this.height,
     required this.buttonPressed,
     this.elevation,
     this.isPressEnable = true,
@@ -14,6 +15,7 @@ class CustomElevatedButton extends StatelessWidget {
 
   final String text;
   final double? width;
+  final double? height;
   final void Function() buttonPressed;
   final double? elevation;
   final bool? isPressEnable;
@@ -23,6 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
+      height: height,
       child: ElevatedButton(
         
         style: ElevatedButton.styleFrom(

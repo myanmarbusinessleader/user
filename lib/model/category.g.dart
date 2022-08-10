@@ -13,6 +13,7 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
       searchList: (json['searchList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      image: json['image'] as String?,
     );
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'name': instance.name,
       'searchList': instance.searchList,
       'isGrid': instance.isGrid,
+      'image': instance.image,
     };

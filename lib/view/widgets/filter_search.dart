@@ -87,7 +87,7 @@ class FilterSearch extends StatelessWidget {
                 ),
                 onPressed: () {
                   Get.to(() => BusinessFilterScreen(
-                  appBarTitle: "လုပ်ငန်းများ", 
+                  appBarTitle: controller.category.value, 
                   hintText: "လုပ်ငန်းအမည်", 
                   search: controller.searchBusiness, 
                   onSelected: (value){
