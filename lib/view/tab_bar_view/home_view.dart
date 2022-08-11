@@ -4,6 +4,7 @@ import 'package:mmbl/constant/constant.dart';
 import 'package:mmbl/controller/filter_form_controller.dart';
 import 'package:mmbl/utils/router/router.dart';
 import 'package:mmbl/utils/widgets/custom_elevated_button.dart';
+import 'package:mmbl/view/widgets/advertisement_widget.dart';
 import '../business_filter_screen.dart';
 import '../widgets/filter_search.dart';
 import '../widgets/top_search_bar.dart';
@@ -20,10 +21,8 @@ class HomeView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              //TopSearchBar Enteprise Name
-              TopSearchBar(size: size, controller: controller),
-              //FilterSearch
-              FilterSearch(controller: controller),
+              //Advertisement
+              const AdvertisementWidget(),
                //Size Categories Widget
                 Container(
                     color: Colors.white,
@@ -96,15 +95,6 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-                          padding: const EdgeInsets.only(left: 20,right: 20,top: 10,),
-                          child: CustomElevatedButton(
-                            height: 50,
-                          color: Colors.blueAccent,
-                          text: "ADD YOUR BUSINESS LISTING IN HERE! +", 
-                          buttonPressed: () => Get.toNamed(addBusinessScreen),
-                          ),
-                        ),
     );
   }
 }

@@ -20,7 +20,7 @@ class BusinessLogo extends StatelessWidget {
            padding: const EdgeInsets.only(right: 20),
            child: CircleAvatar(
              radius: 35,
-             backgroundImage: NetworkImage(bL.businessLogo ?? ""),
+             backgroundImage: NetworkImage(bL.businessLogo.imagePath),
            ),
          ),
          const SizedBox(height: 20),

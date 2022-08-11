@@ -6,6 +6,7 @@ import 'package:mmbl/utils/router/router.dart';
 import 'package:mmbl/view/tab_bar_view/categories_view.dart';
 import 'package:mmbl/view/tab_bar_view/emergency_view.dart';
 import 'package:mmbl/view/tab_bar_view/home_view.dart';
+import 'package:mmbl/view/tab_bar_view/search_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
 
   @override
   void initState() {
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
     tabController.addListener(() {
       controller.changeTabIndex(tabController.index);
     });
@@ -44,6 +45,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
              const [
             Tab(
               text: "HOME",
+            ),
+            Tab(
+              text: "Search",
             ),
             Tab(
               text: "CATEGORIES",
@@ -72,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                       height: size.height*0.25,
                     ),
                   ),
-                   //FOR ADMIN TO UPLOAD CATEGORY
+                  //-------FOR ADMIN TO UPLOAD CATEGORY AND MANAGE ADVERTISEMENT---//
                   ListTile(
                   onTap: () => Get.toNamed(manageCategoriesScreen),
                     leading: const Icon(Icons.edit,size: 35,color: Colors.black,),
@@ -81,6 +85,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                       fontSize: 18,
                     )),
                   ),
+                  ListTile(
+                  onTap: () => Get.toNamed(manageAdvertisementsScreen),
+                    leading: const Icon(Icons.edit,size: 35,color: Colors.black,),
+                    title: const Text("Manage Advertisements",style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    )),
+                  ),
+                  //-------------------------------------------------------//
                   //About
                  const ListTile(
                     leading: Icon(Icons.group,size: 35,color: Colors.black,),
@@ -122,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
           controller: tabController,
           children: const [
           HomeView(),
+          SearchView(),
           CategoriesView(),
           EmergencyView(),
         ]),

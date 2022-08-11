@@ -36,8 +36,7 @@ mixin _$BusinessListing {
   String get contactPhoneNumer => throw _privateConstructorUsedError;
   @JsonKey(nullable: true)
   String? get contactEmail => throw _privateConstructorUsedError;
-  @JsonKey(nullable: true)
-  String? get businessLogo => throw _privateConstructorUsedError;
+  ImageItem get businessLogo => throw _privateConstructorUsedError;
   @JsonKey(nullable: true)
   List<String>? get geoPoint => throw _privateConstructorUsedError;
   @JsonKey(nullable: true, defaultValue: false)
@@ -67,7 +66,7 @@ abstract class $BusinessListingCopyWith<$Res> {
       String contactPersonName,
       String contactPhoneNumer,
       @JsonKey(nullable: true) String? contactEmail,
-      @JsonKey(nullable: true) String? businessLogo,
+      ImageItem businessLogo,
       @JsonKey(nullable: true) List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) bool? isGrid,
       List<String> searchList});
@@ -148,7 +147,7 @@ class _$BusinessListingCopyWithImpl<$Res>
       businessLogo: businessLogo == freezed
           ? _value.businessLogo
           : businessLogo // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as ImageItem,
       geoPoint: geoPoint == freezed
           ? _value.geoPoint
           : geoPoint // ignore: cast_nullable_to_non_nullable
@@ -184,7 +183,7 @@ abstract class _$$_BusinessListingCopyWith<$Res>
       String contactPersonName,
       String contactPhoneNumer,
       @JsonKey(nullable: true) String? contactEmail,
-      @JsonKey(nullable: true) String? businessLogo,
+      ImageItem businessLogo,
       @JsonKey(nullable: true) List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) bool? isGrid,
       List<String> searchList});
@@ -267,7 +266,7 @@ class __$$_BusinessListingCopyWithImpl<$Res>
       businessLogo: businessLogo == freezed
           ? _value.businessLogo
           : businessLogo // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as ImageItem,
       geoPoint: geoPoint == freezed
           ? _value._geoPoint
           : geoPoint // ignore: cast_nullable_to_non_nullable
@@ -285,7 +284,8 @@ class __$$_BusinessListingCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_BusinessListing implements _BusinessListing {
   _$_BusinessListing(
       {required this.name,
@@ -299,7 +299,7 @@ class _$_BusinessListing implements _BusinessListing {
       required this.contactPersonName,
       required this.contactPhoneNumer,
       @JsonKey(nullable: true) this.contactEmail,
-      @JsonKey(nullable: true) this.businessLogo,
+      required this.businessLogo,
       @JsonKey(nullable: true) final List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) this.isGrid,
       required final List<String> searchList})
@@ -337,8 +337,7 @@ class _$_BusinessListing implements _BusinessListing {
   @JsonKey(nullable: true)
   final String? contactEmail;
   @override
-  @JsonKey(nullable: true)
-  final String? businessLogo;
+  final ImageItem businessLogo;
   final List<String>? _geoPoint;
   @override
   @JsonKey(nullable: true)
@@ -440,7 +439,7 @@ abstract class _BusinessListing implements BusinessListing {
       required final String contactPersonName,
       required final String contactPhoneNumer,
       @JsonKey(nullable: true) final String? contactEmail,
-      @JsonKey(nullable: true) final String? businessLogo,
+      required final ImageItem businessLogo,
       @JsonKey(nullable: true) final List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) final bool? isGrid,
       required final List<String> searchList}) = _$_BusinessListing;
@@ -476,8 +475,7 @@ abstract class _BusinessListing implements BusinessListing {
   @JsonKey(nullable: true)
   String? get contactEmail;
   @override
-  @JsonKey(nullable: true)
-  String? get businessLogo;
+  ImageItem get businessLogo;
   @override
   @JsonKey(nullable: true)
   List<String>? get geoPoint;

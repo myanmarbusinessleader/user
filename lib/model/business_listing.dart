@@ -1,10 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mmbl/model/image_item.dart';
 
 part 'business_listing.freezed.dart';
 part 'business_listing.g.dart';
 
 @freezed
 class BusinessListing with _$BusinessListing {
+  @JsonSerializable(explicitToJson: true)
   factory BusinessListing({
     required String name,
     @JsonKey(nullable: true)
@@ -22,8 +24,7 @@ class BusinessListing with _$BusinessListing {
     required String contactPhoneNumer,
     @JsonKey(nullable: true)
     String? contactEmail,
-    @JsonKey(nullable: true)
-    String? businessLogo,
+    required ImageItem businessLogo,
     @JsonKey(nullable: true)
     List<String>? geoPoint,
     @JsonKey(nullable: true,defaultValue: false)
