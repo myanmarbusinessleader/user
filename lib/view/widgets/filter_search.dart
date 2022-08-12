@@ -19,7 +19,7 @@ class FilterSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.blue,
+        color: Colors.amber,
         padding: const EdgeInsets.only(left: 10,right: 20,top: 5),
         child: Column(
           children: [

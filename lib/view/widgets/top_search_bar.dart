@@ -16,7 +16,7 @@ class TopSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: Colors.amber,
       padding: const EdgeInsets.only(left: 25,top: 10,right: 20,),
       height: 70,
       width: size.width,

@@ -50,11 +50,10 @@ class FilterFormController extends GetxController {
 
   void listenBusinesses() {
     FirebaseFirestore.instance.collection(businesses)
+    .orderBy("dateTime", descending: true)
     .snapshots()
     .listen((event) {
-      var busList = event.docs.map((e) => e.data()).toList();
-    busList.sort((a,b) => a["name"].compareTo(b["name"]));
-    businessList.value = busList;
+      businessList.value = event.docs.map((e) => e.data()).toList();
     });
     
   }

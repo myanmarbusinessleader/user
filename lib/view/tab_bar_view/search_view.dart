@@ -32,7 +32,7 @@ class SearchView extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 20,right: 20,top: 10,),
                           child: CustomElevatedButton(
                             height: 50,
-                          color: Colors.blueAccent,
+                          color: Colors.amber,
                           text: "ADD YOUR BUSINESS LISTING IN HERE! +", 
                           buttonPressed: () => Get.toNamed(addBusinessScreen),
                           ),

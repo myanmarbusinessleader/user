@@ -53,30 +53,58 @@ class BusinessFilterSearchList extends StatelessWidget {
                     crossAxisSpacing: 4,
                     axisDirection: AxisDirection.down,
                     children: dataList.map((e){
+                       if((controller.state.value != allStates) && (e.state != controller.state.value)
+                      ||
+                      (controller.township.value != allTownship) && (e.township != controller.township.value)
+                      ||
+                      (controller.category.value != allCategory) && (e.categoryID != controller.category.value)
+                      ){
+                        totalNotFound++;
+                      return totalNotFound == dataList.length ?
+                      StaggeredGridTile.count(
+                       crossAxisCellCount: 4,
+                       mainAxisCellCount: 4,
+                        child: SizedBox(
+                          height: size.height*0.5,
+                          child: const Center(
+                            child: Text(
+                                "No results found!",
+                            ),
+                          ),
+                        ),
+                      )
+                      : const SizedBox();
+                    }
                       var count = getCrossAndMain(e.businessLogo.width);
-                      return StaggeredGridTile.count(
-                              crossAxisCellCount: count[0],
-                              mainAxisCellCount: count[1],
-                              child: Card(
-                                elevation: 10,
-                                child: CachedNetworkImage(
-                                  fit: BoxFit.fill,
-                                progressIndicatorBuilder: (context, url, status) {
-                                  return Shimmer.fromColors(
-                                    child:  Container(
-                                      color: Colors.white,
-                                    ),
-                                    baseColor: Colors.grey.shade300,
-                                    highlightColor: Colors.white,
-                                  );
-                                },
-                                errorWidget: (context, url, whatever) {
-                                  return const Text("Image not available");
-                                },
-                                imageUrl: e.businessLogo.imagePath,
-                                                          ),
+                      return InkWell(
+                        onTap: () {
+                        controller.setSelectedBL(e);
+                        Get.toNamed(businessDetailScreen);
+                       },
+                        child: StaggeredGridTile.count(
+                                crossAxisCellCount: count[0],
+                                mainAxisCellCount: count[1],
+                                child: Card(
+                                  elevation: 10,
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                  progressIndicatorBuilder: (context, url, status) {
+                                    return Shimmer.fromColors(
+                                      child:  Container(
+                                        color: Colors.white,
+                                      ),
+                                      baseColor: Colors.grey.shade300,
+                                      highlightColor: Colors.white,
+                                    );
+                                  },
+                                  errorWidget: (context, url, whatever) {
+                                    return const Text("Image not available");
+                                  },
+                                  imageUrl: e.businessLogo.imagePath,
+                                                            ),
+                                ),
                               ),
-                            );
+                      );
                     }).toList(),
                     ),
                   );

@@ -28,6 +28,7 @@ _$_BusinessListing _$$_BusinessListingFromJson(Map<String, dynamic> json) =>
       searchList: (json['searchList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      dateTime: DateTime.parse(json['dateTime'] as String),
     );
 
 Map<String, dynamic> _$$_BusinessListingToJson(_$_BusinessListing instance) =>
@@ -47,4 +48,5 @@ Map<String, dynamic> _$$_BusinessListingToJson(_$_BusinessListing instance) =>
       'geoPoint': instance.geoPoint,
       'isGrid': instance.isGrid,
       'searchList': instance.searchList,
+      'dateTime': instance.dateTime.toIso8601String(),
     };

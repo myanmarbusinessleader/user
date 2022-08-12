@@ -30,6 +30,7 @@ class BusinessListing with _$BusinessListing {
     @JsonKey(nullable: true,defaultValue: false)
     bool? isGrid,
     required List<String> searchList,
+    required DateTime dateTime,
   }) = _BusinessListing;
 
   factory BusinessListing.fromJson(Map<String,dynamic> json) => _$BusinessListingFromJson(json);
