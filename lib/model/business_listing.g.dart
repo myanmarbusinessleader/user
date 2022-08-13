@@ -19,7 +19,8 @@ _$_BusinessListing _$$_BusinessListingFromJson(Map<String, dynamic> json) =>
       contactPersonName: json['contactPersonName'] as String,
       contactPhoneNumer: json['contactPhoneNumer'] as String,
       contactEmail: json['contactEmail'] as String?,
-      businessLogo: json['businessLogo'] as String?,
+      businessLogo:
+          ImageItem.fromJson(json['businessLogo'] as Map<String, dynamic>),
       geoPoint: (json['geoPoint'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -27,6 +28,7 @@ _$_BusinessListing _$$_BusinessListingFromJson(Map<String, dynamic> json) =>
       searchList: (json['searchList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      dateTime: DateTime.parse(json['dateTime'] as String),
     );
 
 Map<String, dynamic> _$$_BusinessListingToJson(_$_BusinessListing instance) =>
@@ -42,8 +44,9 @@ Map<String, dynamic> _$$_BusinessListingToJson(_$_BusinessListing instance) =>
       'contactPersonName': instance.contactPersonName,
       'contactPhoneNumer': instance.contactPhoneNumer,
       'contactEmail': instance.contactEmail,
-      'businessLogo': instance.businessLogo,
+      'businessLogo': instance.businessLogo.toJson(),
       'geoPoint': instance.geoPoint,
       'isGrid': instance.isGrid,
       'searchList': instance.searchList,
+      'dateTime': instance.dateTime.toIso8601String(),
     };

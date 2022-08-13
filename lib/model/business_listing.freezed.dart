@@ -36,13 +36,13 @@ mixin _$BusinessListing {
   String get contactPhoneNumer => throw _privateConstructorUsedError;
   @JsonKey(nullable: true)
   String? get contactEmail => throw _privateConstructorUsedError;
-  @JsonKey(nullable: true)
-  String? get businessLogo => throw _privateConstructorUsedError;
+  ImageItem get businessLogo => throw _privateConstructorUsedError;
   @JsonKey(nullable: true)
   List<String>? get geoPoint => throw _privateConstructorUsedError;
   @JsonKey(nullable: true, defaultValue: false)
   bool? get isGrid => throw _privateConstructorUsedError;
   List<String> get searchList => throw _privateConstructorUsedError;
+  DateTime get dateTime => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -67,10 +67,11 @@ abstract class $BusinessListingCopyWith<$Res> {
       String contactPersonName,
       String contactPhoneNumer,
       @JsonKey(nullable: true) String? contactEmail,
-      @JsonKey(nullable: true) String? businessLogo,
+      ImageItem businessLogo,
       @JsonKey(nullable: true) List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) bool? isGrid,
-      List<String> searchList});
+      List<String> searchList,
+      DateTime dateTime});
 }
 
 /// @nodoc
@@ -99,6 +100,7 @@ class _$BusinessListingCopyWithImpl<$Res>
     Object? geoPoint = freezed,
     Object? isGrid = freezed,
     Object? searchList = freezed,
+    Object? dateTime = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
@@ -148,7 +150,7 @@ class _$BusinessListingCopyWithImpl<$Res>
       businessLogo: businessLogo == freezed
           ? _value.businessLogo
           : businessLogo // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as ImageItem,
       geoPoint: geoPoint == freezed
           ? _value.geoPoint
           : geoPoint // ignore: cast_nullable_to_non_nullable
@@ -161,6 +163,10 @@ class _$BusinessListingCopyWithImpl<$Res>
           ? _value.searchList
           : searchList // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      dateTime: dateTime == freezed
+          ? _value.dateTime
+          : dateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -184,10 +190,11 @@ abstract class _$$_BusinessListingCopyWith<$Res>
       String contactPersonName,
       String contactPhoneNumer,
       @JsonKey(nullable: true) String? contactEmail,
-      @JsonKey(nullable: true) String? businessLogo,
+      ImageItem businessLogo,
       @JsonKey(nullable: true) List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) bool? isGrid,
-      List<String> searchList});
+      List<String> searchList,
+      DateTime dateTime});
 }
 
 /// @nodoc
@@ -218,6 +225,7 @@ class __$$_BusinessListingCopyWithImpl<$Res>
     Object? geoPoint = freezed,
     Object? isGrid = freezed,
     Object? searchList = freezed,
+    Object? dateTime = freezed,
   }) {
     return _then(_$_BusinessListing(
       name: name == freezed
@@ -267,7 +275,7 @@ class __$$_BusinessListingCopyWithImpl<$Res>
       businessLogo: businessLogo == freezed
           ? _value.businessLogo
           : businessLogo // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as ImageItem,
       geoPoint: geoPoint == freezed
           ? _value._geoPoint
           : geoPoint // ignore: cast_nullable_to_non_nullable
@@ -280,12 +288,17 @@ class __$$_BusinessListingCopyWithImpl<$Res>
           ? _value._searchList
           : searchList // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      dateTime: dateTime == freezed
+          ? _value.dateTime
+          : dateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_BusinessListing implements _BusinessListing {
   _$_BusinessListing(
       {required this.name,
@@ -299,10 +312,11 @@ class _$_BusinessListing implements _BusinessListing {
       required this.contactPersonName,
       required this.contactPhoneNumer,
       @JsonKey(nullable: true) this.contactEmail,
-      @JsonKey(nullable: true) this.businessLogo,
+      required this.businessLogo,
       @JsonKey(nullable: true) final List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) this.isGrid,
-      required final List<String> searchList})
+      required final List<String> searchList,
+      required this.dateTime})
       : _geoPoint = geoPoint,
         _searchList = searchList;
 
@@ -337,8 +351,7 @@ class _$_BusinessListing implements _BusinessListing {
   @JsonKey(nullable: true)
   final String? contactEmail;
   @override
-  @JsonKey(nullable: true)
-  final String? businessLogo;
+  final ImageItem businessLogo;
   final List<String>? _geoPoint;
   @override
   @JsonKey(nullable: true)
@@ -360,8 +373,11 @@ class _$_BusinessListing implements _BusinessListing {
   }
 
   @override
+  final DateTime dateTime;
+
+  @override
   String toString() {
-    return 'BusinessListing(name: $name, phoneNumber: $phoneNumber, email: $email, website: $website, businessAddress: $businessAddress, state: $state, township: $township, categoryID: $categoryID, contactPersonName: $contactPersonName, contactPhoneNumer: $contactPhoneNumer, contactEmail: $contactEmail, businessLogo: $businessLogo, geoPoint: $geoPoint, isGrid: $isGrid, searchList: $searchList)';
+    return 'BusinessListing(name: $name, phoneNumber: $phoneNumber, email: $email, website: $website, businessAddress: $businessAddress, state: $state, township: $township, categoryID: $categoryID, contactPersonName: $contactPersonName, contactPhoneNumer: $contactPhoneNumer, contactEmail: $contactEmail, businessLogo: $businessLogo, geoPoint: $geoPoint, isGrid: $isGrid, searchList: $searchList, dateTime: $dateTime)';
   }
 
   @override
@@ -391,7 +407,8 @@ class _$_BusinessListing implements _BusinessListing {
             const DeepCollectionEquality().equals(other._geoPoint, _geoPoint) &&
             const DeepCollectionEquality().equals(other.isGrid, isGrid) &&
             const DeepCollectionEquality()
-                .equals(other._searchList, _searchList));
+                .equals(other._searchList, _searchList) &&
+            const DeepCollectionEquality().equals(other.dateTime, dateTime));
   }
 
   @JsonKey(ignore: true)
@@ -412,7 +429,8 @@ class _$_BusinessListing implements _BusinessListing {
       const DeepCollectionEquality().hash(businessLogo),
       const DeepCollectionEquality().hash(_geoPoint),
       const DeepCollectionEquality().hash(isGrid),
-      const DeepCollectionEquality().hash(_searchList));
+      const DeepCollectionEquality().hash(_searchList),
+      const DeepCollectionEquality().hash(dateTime));
 
   @JsonKey(ignore: true)
   @override
@@ -440,10 +458,11 @@ abstract class _BusinessListing implements BusinessListing {
       required final String contactPersonName,
       required final String contactPhoneNumer,
       @JsonKey(nullable: true) final String? contactEmail,
-      @JsonKey(nullable: true) final String? businessLogo,
+      required final ImageItem businessLogo,
       @JsonKey(nullable: true) final List<String>? geoPoint,
       @JsonKey(nullable: true, defaultValue: false) final bool? isGrid,
-      required final List<String> searchList}) = _$_BusinessListing;
+      required final List<String> searchList,
+      required final DateTime dateTime}) = _$_BusinessListing;
 
   factory _BusinessListing.fromJson(Map<String, dynamic> json) =
       _$_BusinessListing.fromJson;
@@ -476,8 +495,7 @@ abstract class _BusinessListing implements BusinessListing {
   @JsonKey(nullable: true)
   String? get contactEmail;
   @override
-  @JsonKey(nullable: true)
-  String? get businessLogo;
+  ImageItem get businessLogo;
   @override
   @JsonKey(nullable: true)
   List<String>? get geoPoint;
@@ -486,6 +504,8 @@ abstract class _BusinessListing implements BusinessListing {
   bool? get isGrid;
   @override
   List<String> get searchList;
+  @override
+  DateTime get dateTime;
   @override
   @JsonKey(ignore: true)
   _$$_BusinessListingCopyWith<_$_BusinessListing> get copyWith =>

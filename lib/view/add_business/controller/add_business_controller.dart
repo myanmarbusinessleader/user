@@ -9,6 +9,7 @@ import 'package:mmbl/controller/filter_form_controller.dart';
 import 'package:mmbl/model/business_listing.dart';
 import 'package:mmbl/model/form_object.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mmbl/model/image_item.dart';
 import 'package:mmbl/view/widgets/show_location_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -162,7 +163,9 @@ class AddBusinessController extends GetxController {
             .then((snapshot) async {
             await snapshot.ref.getDownloadURL()
             .then((value) async{
-              final temp = getNameList(inputMap["Business Name"]!.value!.value);
+              await decodeImageFromList(file.readAsBytesSync())
+              .then((decodedImage) async{
+                final temp = [""];
               await _database.write(
                 collectionPath: businesses, 
                 documentPath: id,
@@ -178,14 +181,20 @@ class AddBusinessController extends GetxController {
                   contactPersonName: inputMap["Contact Person Name"]!.value!.value,
                   contactPhoneNumer: inputMap["Contact Phone Number"]!.value!.value,
                   contactEmail: inputMap["Contact Email"]!.value!.value,
-                  businessLogo: value,
+                  businessLogo: ImageItem(
+                    imagePath: value, 
+                    height: decodedImage.height, 
+                    width: decodedImage.width,
+                    ),
                   geoPoint: geoPoint,
                   searchList: temp,
+                  dateTime: DateTime.now(), 
                   ).toJson(),
                 );
                 isLoading.value = false;
                 Get.back();
                 Get.snackbar("Success","");
+              });
             });
           });
       }catch(e){

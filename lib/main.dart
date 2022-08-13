@@ -18,6 +18,16 @@ class MyApp extends StatelessWidget {
     Get.put(FilterFormController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.amber,
+        accentColor: Colors.amber,
+        appBarTheme: const AppBarTheme(
+          color:  Colors.amber,
+        ),
+        cardColor: Colors.amber,
+        buttonColor: Colors.amber,
+        
+      ),
       initialRoute: homeScreen,
       getPages: getPages,
     );

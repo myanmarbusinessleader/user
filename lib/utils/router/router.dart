@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:mmbl/view/add_advertisement/bin/add_advertisement_binding.dart';
+import 'package:mmbl/view/add_advertisement/view/add_advertisement_view.dart';
 import 'package:mmbl/view/business_detail/business_detail_screen.dart';
 import 'package:mmbl/view/add_business/bin/add_business_binding.dart';
 import 'package:mmbl/view/add_business/view/add_business_listing.dart';
@@ -11,7 +13,7 @@ const homeScreen = "/home_screen";
 const addBusinessScreen = "/add_business_screen";
 const businessDetailScreen = "/business_detail_screen";
 const manageCategoriesScreen = "/manage_categories_screen";
-
+const manageAdvertisementsScreen = "/manage_advertisement_screen";
 
 List<GetPage<dynamic>> getPages = [
   GetPage(
@@ -31,5 +33,10 @@ List<GetPage<dynamic>> getPages = [
     name: manageCategoriesScreen, 
     binding: ManageCategoriesBinding(),
     page:() => const ManageCategoriesScreen()
+    ),
+  GetPage(
+    name: manageAdvertisementsScreen, 
+    binding: AddAdvertisementBinding(),
+    page:() => const ManageAdvertisementView()
     ),
 ];

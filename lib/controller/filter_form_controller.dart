@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmbl/constant/constant.dart';
 import 'package:mmbl/constant/state.dart';
 import 'package:mmbl/constant/township.dart';
+import 'package:mmbl/model/advertisement.dart';
 import 'package:mmbl/model/business_listing.dart';
 import 'package:mmbl/model/category.dart';
 import '../service/database.dart';
@@ -14,6 +16,7 @@ class FilterFormController extends GetxController {
   final TextEditingController ePController = TextEditingController();
   RxList<Map<String,dynamic>> categoryList = <Map<String,dynamic>>[].obs;
   RxList<Map<String,dynamic>> businessList = <Map<String,dynamic>>[].obs;
+  RxList<Advertisement> advertisementList = <Advertisement>[].obs;
   RxList<Category> gridList = <Category>[].obs;
   final _database = Database();
   var category = allCategory.obs;
@@ -24,12 +27,14 @@ class FilterFormController extends GetxController {
 
   @override
   void onInit() {
+    signInAnonymus();
     listenGridList();
     listenCategories();
     listenBusinesses();
+    listenAdvertisements();
     super.onInit();
   }
-
+  
   Future<void> listenGridList() async{
     final result = await FirebaseFirestore.instance
     .collection(categoryCollection)
@@ -45,11 +50,10 @@ class FilterFormController extends GetxController {
 
   void listenBusinesses() {
     FirebaseFirestore.instance.collection(businesses)
+    .orderBy("dateTime", descending: true)
     .snapshots()
     .listen((event) {
-      var busList = event.docs.map((e) => e.data()).toList();
-    busList.sort((a,b) => a["name"].compareTo(b["name"]));
-    businessList.value = busList;
+      businessList.value = event.docs.map((e) => e.data()).toList();
     });
     
   }
@@ -64,6 +68,15 @@ class FilterFormController extends GetxController {
     });
     
   }
+
+  void listenAdvertisements(){
+    FirebaseFirestore.instance.collection(advertisementCollection)
+    .orderBy("dateTime",descending: true)
+    .snapshots()
+    .listen((event) {
+      advertisementList.value = event.docs.map((e) => Advertisement.fromJson(e.data())).toList();
+    });
+  }
   
   void setSelectedBL(BusinessListing b) => selectedBL = b;
   void changeCategory(String value) => category.value = value;
@@ -71,7 +84,7 @@ class FilterFormController extends GetxController {
   void changeTownship(String value) => township.value = value;
   void changeTabIndex(int value){
     tabIndex.value = value;
-    if(value == 0){
+    if(value == 1){
       state.value = allStates;
       township.value = allTownship;
       category.value = allCategory;
@@ -135,5 +148,21 @@ class FilterFormController extends GetxController {
         tempList.add(temp);
       }
     return tempList;
+  }
+  
+   signInAnonymus() async{
+    try {
+  final userCredential =
+      await FirebaseAuth.instance.signInAnonymously();
+      print("Signed in with temporary account.");
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "operation-not-allowed":
+          print("Anonymous auth hasn't been enabled for this project.");
+          break;
+        default:
+          print("Unknown error.");
+      }
+    }
   }
 }

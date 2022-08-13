@@ -9,5 +9,6 @@ const items = "items";
 const stateCollection = "state";
 const businesses = "businesses";
 const categoryCollection = "categories";
+const advertisementCollection = "advertisements";
 
 
