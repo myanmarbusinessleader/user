@@ -139,7 +139,7 @@ class ManageBusinessView extends StatelessWidget {
       ),
       floatingActionButton: IconButton(
         onPressed: () => Get.toNamed(addBusinessScreen), 
-        icon: const Icon(FontAwesomeIcons.circlePlus,color: Colors.white,size: 45),
+        icon: const Icon(FontAwesomeIcons.circlePlus,color: Colors.amber,size: 45),
         )
     );
   }
