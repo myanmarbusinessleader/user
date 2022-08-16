@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           color:  Colors.amber,
         ),
-        cardColor: Colors.amber,
+        cardColor: Colors.white,
         buttonColor: Colors.amber,
         
       ),

@@ -8,6 +8,7 @@ part 'business_listing.g.dart';
 class BusinessListing with _$BusinessListing {
   @JsonSerializable(explicitToJson: true)
   factory BusinessListing({
+    required String id,
     required String name,
     @JsonKey(nullable: true)
     String? phoneNumber,

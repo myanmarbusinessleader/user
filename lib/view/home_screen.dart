@@ -78,6 +78,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                   ),
                   //-------FOR ADMIN TO UPLOAD CATEGORY AND MANAGE ADVERTISEMENT---//
                   ListTile(
+                  onTap: () => Get.toNamed(manageBusinessScreen),
+                    leading: const Icon(Icons.edit,size: 35,color: Colors.black,),
+                    title: const Text("Manage Businesses",style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    )),
+                  ),
+                  ListTile(
                   onTap: () => Get.toNamed(manageCategoriesScreen),
                     leading: const Icon(Icons.edit,size: 35,color: Colors.black,),
                     title: const Text("Manage Categories",style: TextStyle(

@@ -12,6 +12,15 @@ class Database{
     .doc(documentPath)
     .set(data);
   
+  Future<void> update({
+    required String collectionPath,
+    String? documentPath,
+    required Map<String,dynamic> data,
+  }) =>
+    _auth.collection(collectionPath)
+    .doc(documentPath)
+    .update(data);
+  
   Query<Map<String, dynamic>> searchDocuments({
    required String collectionPath,String? documentPath,
    required String value,

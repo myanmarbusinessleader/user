@@ -14,7 +14,16 @@ class ManageCategoriesScreen extends StatelessWidget {
     final FilterFormController fController = Get.find();
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+         title: const Text(
+          "Manage Categories",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              wordSpacing: 1
+          ),
+        ),
+      ),
       body: Column(
         children: [
           //Form
@@ -65,6 +74,9 @@ class ManageCategoriesScreen extends StatelessWidget {
                           width: size.width * 0.7,
                           height: 50,
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.amber,
+                            ),
                             onPressed: () => controller.saveCategory(), 
                             child: controller.isLoading.value ?
                             const CircularProgressIndicator(

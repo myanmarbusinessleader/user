@@ -58,15 +58,9 @@ class HomeView extends StatelessWidget {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             //Image
-                                            Container(
-                                              height: 80,
-                                              width: 80,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.blue,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)
-                                                ),
-                                              ),
+                                            SizedBox(
+                                              height: 85,
+                                              width: 85,
                                               child: Card(
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(15),

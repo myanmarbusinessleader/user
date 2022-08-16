@@ -3,22 +3,25 @@ import 'package:get/get.dart';
 import 'package:mmbl/controller/filter_form_controller.dart';
 import 'package:mmbl/utils/widgets/business_filterform.dart';
 import 'package:mmbl/view/add_business/controller/add_business_controller.dart';
+import 'package:mmbl/view/manage_business/update/controller/update_business_controller.dart';
 
-import '../../../constant/constant.dart';
-import '../../../utils/widgets/business_formfield.dart';
-import '../../filter_screen.dart';
+import '../../../../constant/constant.dart';
+import '../../../../utils/widgets/business_formfield.dart';
+import '../../../../utils/widgets/update_business_formfield.dart';
+import '../../../filter_screen.dart';
 
-class AddingBusinessListingScreen extends StatelessWidget {
-  const AddingBusinessListingScreen({Key? key}) : super(key: key);
+
+class UpdateBusinessView extends StatelessWidget {
+  const UpdateBusinessView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final AddBusinessController controller = Get.find();
+    final UpdateBusinessController controller = Get.find();
     final FilterFormController fController = Get.find();
     return Scaffold(
       appBar: AppBar(
          title: const Text(
-          "Add Businesses",
+          "Update Businesses",
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -35,11 +38,12 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 //Name
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Business Name",
                       label: "Business Name (*)",
                       hasError: controller.checkHasError("Business Name"),
                       error: controller.inputMap["Business Name"]!.value!.error,
+                      value: controller.inputMap["Business Name"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Business Name",value),
                       );
                   }
@@ -47,11 +51,12 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 //Phone
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Business Phone Number",
                       label: "Business Phone Number",
                       hasError: controller.checkHasError("Business Phone Number"),
                       error: controller.inputMap["Business Phone Number"]!.value!.error,
+                      value: controller.inputMap["Business Phone Number"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Business Phone Number",value),
                       );
                   }
@@ -59,11 +64,12 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 //Email
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Business Email",
                       label: "Business Email",
                       hasError: controller.checkHasError("Business Email"),
                       error: controller.inputMap["Business Email"]!.value!.error,
+                      value: controller.inputMap["Business Email"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Business Email",value),
                       );
                   }
@@ -71,11 +77,12 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 //Website
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Website",
                       label: "Website",
                       hasError: controller.checkHasError("Website"),
                       error: controller.inputMap["Website"]!.value!.error,
+                      value: controller.inputMap["Website"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Website",value),
                       );
                   }
@@ -83,11 +90,12 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 //Address
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Business Address",
                       label: "Business Address (*)",
                       hasError: controller.checkHasError("Business Address"),
                       error: controller.inputMap["Business Address"]!.value!.error,
+                      value: controller.inputMap["Business Address"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Business Address",value),
                       );
                   }
@@ -153,11 +161,12 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 //Contact Name
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Contact Person Name",
                       label: "Contact Person Name (*)",
                       hasError: controller.checkHasError("Contact Person Name"),
                       error: controller.inputMap["Contact Person Name"]!.value!.error,
+                      value: controller.inputMap["Contact Person Name"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Contact Person Name",value),
                       );
                   }
@@ -165,22 +174,24 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 //Contacct Phone Number
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Contact Phone Number",
                       label: "Contact Phone Number (*)",
                       hasError: controller.checkHasError("Contact Phone Number"),
                       error: controller.inputMap["Contact Phone Number"]!.value!.error,
+                      value: controller.inputMap["Contact Phone Number"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Contact Phone Number",value),
                       );
                   }
                 ),
                 Obx(
                    () {
-                    return BusinessFormField(
+                    return UpdateBusinessFormField(
                       hintText: "Contact Email",
                       label: "Contact Email",
                       hasError: controller.checkHasError("Contact Email"),
                       error: controller.inputMap["Contact Email"]!.value!.error,
+                      value: controller.inputMap["Contact Email"]!.value!.value,
                       onChanged: (value) => controller.formObjectValidation("Contact Email",value),
                       );
                   }
@@ -201,9 +212,11 @@ class AddingBusinessListingScreen extends StatelessWidget {
                 Obx((){
                   return BusinessFilterForm(
                     label: "Business Logo (*)", 
-                    value: controller.businessLogo.value,
+                    value: controller.businessLogo.isNotEmpty ? 
+                    controller.businessLogo.value : fController.editedBL!.businessLogo
+                    .imagePath,
                     error: "Business Logo is required", 
-                    hasError: controller.businessLogo.isEmpty && controller.isFirstTimePress.value,
+                    hasError: false,
                     buttonPressed: () => controller.getImage(), 
                     );
                 }),
@@ -215,12 +228,12 @@ class AddingBusinessListingScreen extends StatelessWidget {
                       ),
                       onPressed: (){
                         if(controller.validate()){
-                          controller.saveBusinessListing();
+                          controller.updateBusinessListing();
                         }
                       }, 
                       child:controller.isLoading.value ? 
                       const CircularProgressIndicator(color: Colors.white,)
-                      : const Text("Send Info"),
+                      : const Text("Update Info"),
                       );
                   }
                 ),

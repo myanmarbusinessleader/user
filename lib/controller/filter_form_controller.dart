@@ -18,12 +18,14 @@ class FilterFormController extends GetxController {
   RxList<Map<String,dynamic>> businessList = <Map<String,dynamic>>[].obs;
   RxList<Advertisement> advertisementList = <Advertisement>[].obs;
   RxList<Category> gridList = <Category>[].obs;
+  
   final _database = Database();
   var category = allCategory.obs;
   var state = allStates.obs;
   var township = allTownship.obs;
   var tabIndex = 0.obs;
   BusinessListing? selectedBL;
+  BusinessListing? editedBL;
 
   @override
   void onInit() {
@@ -79,6 +81,7 @@ class FilterFormController extends GetxController {
   }
   
   void setSelectedBL(BusinessListing b) => selectedBL = b;
+  void setEditedBL(BusinessListing b) => editedBL = b;
   void changeCategory(String value) => category.value = value;
   void changeState(String value) => state.value = value;
   void changeTownship(String value) => township.value = value;

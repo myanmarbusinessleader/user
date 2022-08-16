@@ -28,7 +28,7 @@ class SearchView extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
+     /*  bottomNavigationBar: Padding(
                           padding: const EdgeInsets.only(left: 20,right: 20,top: 10,),
                           child: CustomElevatedButton(
                             height: 50,
@@ -36,7 +36,7 @@ class SearchView extends StatelessWidget {
                           text: "ADD YOUR BUSINESS LISTING IN HERE! +", 
                           buttonPressed: () => Get.toNamed(addBusinessScreen),
                           ),
-                        ),
+                        ), */
     );
   }
 }

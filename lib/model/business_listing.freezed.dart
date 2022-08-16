@@ -20,6 +20,7 @@ BusinessListing _$BusinessListingFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$BusinessListing {
+  String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   @JsonKey(nullable: true)
   String? get phoneNumber => throw _privateConstructorUsedError;
@@ -56,7 +57,8 @@ abstract class $BusinessListingCopyWith<$Res> {
           BusinessListing value, $Res Function(BusinessListing) then) =
       _$BusinessListingCopyWithImpl<$Res>;
   $Res call(
-      {String name,
+      {String id,
+      String name,
       @JsonKey(nullable: true) String? phoneNumber,
       @JsonKey(nullable: true) String? email,
       @JsonKey(nullable: true) String? website,
@@ -85,6 +87,7 @@ class _$BusinessListingCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? phoneNumber = freezed,
     Object? email = freezed,
@@ -103,6 +106,10 @@ class _$BusinessListingCopyWithImpl<$Res>
     Object? dateTime = freezed,
   }) {
     return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -179,7 +186,8 @@ abstract class _$$_BusinessListingCopyWith<$Res>
       __$$_BusinessListingCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String name,
+      {String id,
+      String name,
       @JsonKey(nullable: true) String? phoneNumber,
       @JsonKey(nullable: true) String? email,
       @JsonKey(nullable: true) String? website,
@@ -210,6 +218,7 @@ class __$$_BusinessListingCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? phoneNumber = freezed,
     Object? email = freezed,
@@ -228,6 +237,10 @@ class __$$_BusinessListingCopyWithImpl<$Res>
     Object? dateTime = freezed,
   }) {
     return _then(_$_BusinessListing(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -301,7 +314,8 @@ class __$$_BusinessListingCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_BusinessListing implements _BusinessListing {
   _$_BusinessListing(
-      {required this.name,
+      {required this.id,
+      required this.name,
       @JsonKey(nullable: true) this.phoneNumber,
       @JsonKey(nullable: true) this.email,
       @JsonKey(nullable: true) this.website,
@@ -323,6 +337,8 @@ class _$_BusinessListing implements _BusinessListing {
   factory _$_BusinessListing.fromJson(Map<String, dynamic> json) =>
       _$$_BusinessListingFromJson(json);
 
+  @override
+  final String id;
   @override
   final String name;
   @override
@@ -377,7 +393,7 @@ class _$_BusinessListing implements _BusinessListing {
 
   @override
   String toString() {
-    return 'BusinessListing(name: $name, phoneNumber: $phoneNumber, email: $email, website: $website, businessAddress: $businessAddress, state: $state, township: $township, categoryID: $categoryID, contactPersonName: $contactPersonName, contactPhoneNumer: $contactPhoneNumer, contactEmail: $contactEmail, businessLogo: $businessLogo, geoPoint: $geoPoint, isGrid: $isGrid, searchList: $searchList, dateTime: $dateTime)';
+    return 'BusinessListing(id: $id, name: $name, phoneNumber: $phoneNumber, email: $email, website: $website, businessAddress: $businessAddress, state: $state, township: $township, categoryID: $categoryID, contactPersonName: $contactPersonName, contactPhoneNumer: $contactPhoneNumer, contactEmail: $contactEmail, businessLogo: $businessLogo, geoPoint: $geoPoint, isGrid: $isGrid, searchList: $searchList, dateTime: $dateTime)';
   }
 
   @override
@@ -385,6 +401,7 @@ class _$_BusinessListing implements _BusinessListing {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_BusinessListing &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality()
                 .equals(other.phoneNumber, phoneNumber) &&
@@ -415,6 +432,7 @@ class _$_BusinessListing implements _BusinessListing {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(phoneNumber),
       const DeepCollectionEquality().hash(email),
@@ -447,7 +465,8 @@ class _$_BusinessListing implements _BusinessListing {
 
 abstract class _BusinessListing implements BusinessListing {
   factory _BusinessListing(
-      {required final String name,
+      {required final String id,
+      required final String name,
       @JsonKey(nullable: true) final String? phoneNumber,
       @JsonKey(nullable: true) final String? email,
       @JsonKey(nullable: true) final String? website,
@@ -467,6 +486,8 @@ abstract class _BusinessListing implements BusinessListing {
   factory _BusinessListing.fromJson(Map<String, dynamic> json) =
       _$_BusinessListing.fromJson;
 
+  @override
+  String get id;
   @override
   String get name;
   @override

@@ -13,7 +13,16 @@ class ManageAdvertisementView extends StatelessWidget {
     final FilterFormController fController = Get.find();
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+         title: const Text(
+          "Manage Advertisements",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              wordSpacing: 1
+          ),
+        ),
+      ),
       body: Column(
         children: [
           //Form
@@ -65,6 +74,9 @@ class ManageAdvertisementView extends StatelessWidget {
                           width: size.width * 0.7,
                           height: 50,
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.amber,
+                            ),
                             onPressed: () => controller.saveAdvertisement(), 
                             child: controller.isLoading.value ?
                             const CircularProgressIndicator(
@@ -101,8 +113,10 @@ class ManageAdvertisementView extends StatelessWidget {
                       child: Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(advertisement.name ?? "Name is empty",
-                          style: Theme.of(context).textTheme.titleMedium),
+                          child: Text((!(advertisement.name == null) && 
+                          advertisement.name!.isNotEmpty) ? advertisement.name! : "Name is empty",
+                          style: Theme.of(context).textTheme.titleMedium
+                          ?.copyWith(color: Colors.black)),
                         ),
                       ),
                     );

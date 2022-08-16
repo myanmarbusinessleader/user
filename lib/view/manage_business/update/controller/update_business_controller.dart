@@ -10,17 +10,19 @@ import 'package:mmbl/model/business_listing.dart';
 import 'package:mmbl/model/form_object.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mmbl/model/image_item.dart';
+import 'package:mmbl/view/manage_business/controller/manage_business_controller.dart';
 import 'package:mmbl/view/widgets/show_location_picker.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../constant/township.dart';
-import '../../../service/database.dart';
+import '../../../../constant/township.dart';
+import '../../../../service/database.dart';
 
-class AddBusinessController extends GetxController {
+class UpdateBusinessController extends GetxController {
   final _database = Database();
+  final ManageBusinessController _mController = Get.find();
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   RxMap<String,Rxn<FormObject>> inputMap = <String,Rxn<FormObject>>{}.obs;
-  final FilterFormController _controller = Get.find();
+  final FilterFormController controller = Get.find();
   var isFirstTimePress = false.obs;
   var state = allStates.obs;
   var township = allTownship.obs;
@@ -31,36 +33,55 @@ class AddBusinessController extends GetxController {
   
   @override
   void onInit() {
+    final bl = controller.editedBL!;
     inputMap.value = {
       "Business Name": Rxn<FormObject>(
                FormObject.initial().copyWith(isRequired: true,
-               error: "Business Name is required")
+               error: "Business Name is required",
+               value: bl.name,
+               )
                       ),
       "Business Phone Number": Rxn<FormObject>(
-               FormObject.initial()
+               FormObject.initial().copyWith(
+                value: bl.phoneNumber ?? "",
+               )
                       ),
       "Business Email": Rxn<FormObject>(
-               FormObject.initial()
+               FormObject.initial().copyWith(
+                value: bl.email ?? "",
+               )
                       ),
       "Website": Rxn<FormObject>(
-               FormObject.initial()
+               FormObject.initial().copyWith(
+                value: bl.website ?? "",
+               )
                       ),
       "Business Address": Rxn<FormObject>(
                FormObject.initial().copyWith(isRequired: true,
-               error: "Business Address is required"),
+               error: "Business Address is required",
+               value: bl.businessAddress,
+               ),
                       ),
       "Contact Person Name": Rxn<FormObject>(
                FormObject.initial().copyWith(isRequired: true,
+               value: bl.contactPersonName,
                error: "Contact Person Name is required"),
                       ),
       "Contact Phone Number": Rxn<FormObject>(
                FormObject.initial().copyWith(isRequired: true,
+               value: bl.contactPhoneNumer,
                error: "Contact Phone Number is required"),
                       ),
       "Contact Email": Rxn<FormObject>(
-               FormObject.initial()
+               FormObject.initial().copyWith(
+                value: bl.contactEmail ?? "",
+               )
                       ),                                
     };
+    geoPoint.value = bl.geoPoint!;
+    state.value = bl.state!;
+    township.value = bl.township;
+    category.value = bl.categoryID;
     super.onInit();
   }
   
@@ -106,8 +127,8 @@ class AddBusinessController extends GetxController {
     isFirstTimePress.value = true;
     final reqData = inputMap.values.where((element) => element.value?.isRequired == true);
     final resultData = reqData.where((element){
-      debugPrint("***${element.value?.error}");
-      return element.value?.error.isNotEmpty == true;
+      debugPrint("***${element.value?.value}");
+      return element.value?.value.isEmpty == true;
     });
     if(resultData.isNotEmpty || !validPickData()){
       debugPrint("****INVALID");
@@ -121,12 +142,11 @@ class AddBusinessController extends GetxController {
   bool validPickData() => (state.value != allStates)  && 
                           (township.value != allTownship) &&
                           (category.value != allCategory) &&
-                           geoPoint.isNotEmpty &&
-                           businessLogo.isNotEmpty;
+                           geoPoint.isNotEmpty;
 
   bool checkHasError(String key){
     return inputMap[key]!.value!.isRequired &&
-                          inputMap[key]!.value!.error.isNotEmpty && isFirstTimePress.value;
+                          inputMap[key]!.value!.value.isEmpty && isFirstTimePress.value;
   }
 
   Future<List<Map<String, dynamic>>> searchTownship(String? value) async{
@@ -148,29 +168,18 @@ class AddBusinessController extends GetxController {
     debugPrint("Error Image Picking");
   }
 }
- Future<void> saveBusinessListing() async{
+ Future<void> updateBusinessListing() async{
   if(isLoading.value){
     return;
   }
-  final file = File(businessLogo.value);
-  final id =  Uuid().v1();
   isLoading.value = true;
       try {
-        await _firebaseStorage
-            .ref()
-            .child("business/$id")
-            .putFile(file)
-            .then((snapshot) async {
-            await snapshot.ref.getDownloadURL()
-            .then((value) async{
-              await decodeImageFromList(file.readAsBytesSync())
-              .then((decodedImage) async{
-                final temp = [""];
-              await _database.write(
+        await getImageItm().then((value)  async{
+              await _database.update(
                 collectionPath: businesses, 
-                documentPath: id,
+                documentPath: controller.editedBL!.id,
                 data: BusinessListing(
-                  id: id,
+                  id: controller.editedBL!.id,
                   name: inputMap["Business Name"]!.value!.value,
                   phoneNumber: inputMap["Business Phone Number"]!.value!.value,
                   email: inputMap["Business Email"]!.value!.value,
@@ -182,13 +191,9 @@ class AddBusinessController extends GetxController {
                   contactPersonName: inputMap["Contact Person Name"]!.value!.value,
                   contactPhoneNumer: inputMap["Contact Phone Number"]!.value!.value,
                   contactEmail: inputMap["Contact Email"]!.value!.value,
-                  businessLogo: ImageItem(
-                    imagePath: value, 
-                    height: decodedImage.height, 
-                    width: decodedImage.width,
-                    ),
+                  businessLogo: value,
                   geoPoint: geoPoint,
-                  searchList: temp,
+                  searchList: [],
                   dateTime: DateTime.now(), 
                   ).toJson(),
                 );
@@ -196,13 +201,32 @@ class AddBusinessController extends GetxController {
                 Get.back();
                 Get.snackbar("Success","");
               });
-            });
-          });
+              _mController.isSearch.value = false;
       }catch(e){
         isLoading.value = false;
         Get.snackbar("Fail","");
         debugPrint("*******Business Listing Error: $e");
       }
+  }
+
+  Future<ImageItem> getImageItm() async{
+    if(businessLogo.isNotEmpty){
+      final uuid = Uuid().v1();
+      final file = File(businessLogo.value);
+      final snapshot = await _firebaseStorage
+            .ref()
+            .child("business/$uuid")
+            .putFile(file);
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      final decodedImage = await decodeImageFromList(file.readAsBytesSync());
+      return ImageItem(
+                    imagePath: downloadUrl, 
+                    height: decodedImage.height, 
+                    width: decodedImage.width,
+                    );
+    }else{
+      return controller.editedBL!.businessLogo;
+    }
   }
 
   List<String> getNameList(String element){

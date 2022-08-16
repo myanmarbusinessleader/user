@@ -8,6 +8,7 @@ part of 'business_listing.dart';
 
 _$_BusinessListing _$$_BusinessListingFromJson(Map<String, dynamic> json) =>
     _$_BusinessListing(
+      id: json['id'] as String,
       name: json['name'] as String,
       phoneNumber: json['phoneNumber'] as String?,
       email: json['email'] as String?,
@@ -33,6 +34,7 @@ _$_BusinessListing _$$_BusinessListingFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_BusinessListingToJson(_$_BusinessListing instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'phoneNumber': instance.phoneNumber,
       'email': instance.email,
