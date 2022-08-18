@@ -25,7 +25,7 @@ class BusinessProfile extends StatelessWidget {
             children: [
               const Icon(Icons.home,color: Colors.grey,size: 35),
               //Name
-              Text(bL.businessAddress, style: Theme.of(context).textTheme.titleMedium,)
+              Expanded(child: Text(bL.businessAddress, style: Theme.of(context).textTheme.titleMedium,))
             ],
           ),
           //Phone

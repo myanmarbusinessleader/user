@@ -76,34 +76,35 @@ class BusinessFilterSearchList extends StatelessWidget {
                       : const SizedBox();
                     }
                       var count = getCrossAndMain(e.businessLogo.width);
-                      return InkWell(
-                        onTap: () {
-                        controller.setSelectedBL(e);
-                        Get.toNamed(businessDetailScreen);
-                       },
-                        child: StaggeredGridTile.count(
+                      debugPrint("********WITH and Height: ${count[0]} : ${count[1]}");
+                      return  StaggeredGridTile.count(
                                 crossAxisCellCount: count[0],
                                 mainAxisCellCount: count[1],
-                                child: Card(
-                                  elevation: 10,
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.fill,
-                                  progressIndicatorBuilder: (context, url, status) {
-                                    return Shimmer.fromColors(
-                                      child:  Container(
-                                        color: Colors.white,
-                                      ),
-                                      baseColor: Colors.grey.shade300,
-                                      highlightColor: Colors.white,
-                                    );
+                                child: InkWell(
+                                    onTap: () {
+                                    controller.setSelectedBL(e);
+                                    Get.toNamed(businessDetailScreen);
                                   },
-                                  errorWidget: (context, url, whatever) {
-                                    return const Text("Image not available");
-                                  },
-                                  imageUrl: e.businessLogo.imagePath,
-                                                            ),
+                                  child: Card(
+                                    elevation: 10,
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.fill,
+                                    progressIndicatorBuilder: (context, url, status) {
+                                      return Shimmer.fromColors(
+                                        child:  Container(
+                                          color: Colors.white,
+                                        ),
+                                        baseColor: Colors.grey.shade300,
+                                        highlightColor: Colors.white,
+                                      );
+                                    },
+                                    errorWidget: (context, url, whatever) {
+                                      return const Text("Image not available");
+                                    },
+                                    imageUrl: e.businessLogo.imagePath,
+                                                              ),
+                                  ),
                                 ),
-                              ),
                       );
                     }).toList(),
                     ),
